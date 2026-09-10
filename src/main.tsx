@@ -1,37 +1,431 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import { ArrowUpRight, ArrowRight, Plus, Minus, Check, ChevronLeft, MessageCircle, Layers, Ruler, Sparkles, SlidersHorizontal, Wrench, ShieldCheck, Leaf, Menu, X } from 'lucide-react';
-import { comparisons, faqs, projects, site } from './config';
-import { buildMessage, whatsappLink, type Answers } from './contact';
-import './styles.css';
+import React, { useEffect, useState } from "react";
+import { createRoot } from "react-dom/client";
+import {
+  ArrowDown,
+  ArrowRight,
+  ArrowUpRight,
+  Check,
+  ChevronDown,
+  Instagram,
+  MapPin,
+  Menu,
+  Plus,
+  X,
+} from "lucide-react";
+import { faqs, photos, projects, site, type QuoteChecks } from "./config";
+import { Brand, CTA, Eyebrow, Photo } from "./ui";
+import { DetailExplorer, QuoteGuide } from "./ValueExperience";
+import { Qualification } from "./Qualification";
+import "./styles.css";
 
-const icons = [SlidersHorizontal, Layers, Sparkles, Ruler, Wrench];
-function Photo({ src, alt, eager = false, className = '' }: { src: string; alt: string; eager?: boolean; className?: string }) { return <img className={className} src={src} srcSet={`${src.replace('.jpg','-small.jpg')} 640w, ${src} 1600w`} sizes="(max-width: 700px) 100vw, 60vw" alt={alt} loading={eager ? 'eager' : 'lazy'} fetchPriority={eager ? 'high' : 'auto'} width="1600" height="1100"/>; }
-function CTA({ children = 'Quero entender meu projeto', className = '' }: { children?: React.ReactNode; className?: string }) { return <a className={`button ${className}`} href="#seu-projeto">{children}<ArrowUpRight size={18}/></a>; }
-function Eyebrow({ children }: { children: React.ReactNode }) { return <p className="eyebrow"><span/> {children}</p>; }
-function Comparison() {
-  const [active, setActive] = useState(0); const item = comparisons[active];
-  return <section id="diferenciais" className="section comparison"><div className="section-heading"><div><Eyebrow>O VALOR ESTÁ NOS DETALHES</Eyebrow><h2>Dois móveis podem parecer iguais.<br/><em>Os detalhes mudam a experiência.</em></h2></div><p>Vá além da foto. Descubra o que vale observar antes de escolher.</p></div><div className="tabs" aria-label="Detalhes dos móveis">{comparisons.map((c, i) => { const Icon = icons[i]; return <button key={c.name} aria-pressed={active === i} onClick={() => setActive(i)}><Icon size={19}/>{c.name}<span>0{i + 1}</span></button>; })}</div><div className="comparison-panel" aria-live="polite"><div className="detail-photo"><Photo src={item.image} alt={`Referência ilustrativa para observar ${item.name.toLowerCase()}`}/><span className="image-label">IMAGEM ILUSTRATIVA</span><span className="photo-number">0{active + 1}<small> / 05</small></span></div><div className="detail-copy"><span className="eyebrow">{item.name.toUpperCase()}</span><h3>{item.title}</h3><p>{item.look}</p><div className="benefit"><Check size={18}/><p>{item.benefit}</p></div><div className="ask"><span>UMA BOA PERGUNTA PARA FAZER</span><p>“{item.question}”</p></div></div></div></section>;
-}
-function Projects() { return <section id="ambientes" className="section projects"><div className="section-heading"><div><Eyebrow>ESPAÇOS COM PROPÓSITO</Eyebrow><h2>Antes de ser um móvel,<br/><em>é sobre como você vive.</em></h2></div><p>Três ideias para enxergar o projeto além da estética. Ambientes e histórias ilustrativos.</p></div><div className="project-grid">{projects.map((p, i) => <article className="project" key={p.category}><div className="project-photo"><Photo src={p.image} alt={`Ambiente ilustrativo de ${p.category.toLowerCase()}`}/><span className="image-label">PROJETO ILUSTRATIVO</span></div><p className="project-category">{p.category}<span>0{i+1}</span></p><h3>{p.name}</h3><details><summary>Conheça a ideia<Plus size={18}/></summary><div className="story">{[['A necessidade',p.need],['A solução proposta',p.solution],['O resultado esperado',p.result]].map(([a,b])=><div key={a}><h4>{a}</h4><p>{b}</p></div>)}</div></details></article>)}</div></section>; }
-function Qualification() {
-  const [step,setStep] = useState(0); const [answers,setAnswers] = useState<Answers>({environment:'',city:'',measures:'Ainda não sei',blueprint:'Ainda não sei',timing:'Ainda não sei',budget:''}); const [preview,setPreview] = useState(false); const [status,setStatus] = useState(''); const [error,setError] = useState(''); const heading = useRef<HTMLHeadingElement>(null); const output = useRef<HTMLTextAreaElement>(null);
-  const update = (key: keyof Answers, value: string) => setAnswers(a=>({...a,[key]:value}));
-  const move = (value: number) => { setStep(value); setError(''); setTimeout(()=>heading.current?.focus(),0); };
-  const message = buildMessage(answers); const link = whatsappLink(site.whatsapp,message);
-  useEffect(() => { if (preview) { output.current?.focus({ preventScroll: true }); output.current?.scrollIntoView({ block: 'center' }); } }, [preview]);
-  async function copy() { try { await navigator.clipboard.writeText(message); setStatus('Mensagem copiada!'); } catch { output.current?.focus(); output.current?.select(); setStatus('Selecione e copie o texto acima para continuar.'); } }
-  return <section id="seu-projeto" className="section qualification"><div className="form-intro"><Eyebrow>VAMOS COMEÇAR PELO SEU ESPAÇO</Eyebrow><h2>Seu projeto começa<br/>com uma <em>boa conversa.</em></h2><p>Conte um pouco do que você imagina. Vamos organizar suas ideias para o próximo passo.</p><div className="form-note"><MessageCircle size={22}/><p>Sem precisar ter tudo decidido.<br/><strong>Uma ideia já é um começo.</strong></p></div><small>{site.demonstration ? 'Demonstração: nenhuma informação será enviada.' : 'Suas respostas só serão enviadas quando você confirmar no WhatsApp.'}</small></div><div className="form-card"><div className="progress-label"><span>SEU PROJETO</span><span>ETAPA {step+1} DE 3</span></div><div className="progress">{[0,1,2].map(i=><span key={i} className={i<=step?'filled':''}/>)}</div><h3 tabIndex={-1} ref={heading}>{['Qual espaço vamos transformar?','O que você já tem em mãos?','Vamos organizar sua ideia.'][step]}</h3><form onSubmit={e=>{ e.preventDefault(); if(step===0 && (!answers.environment || !answers.city.trim())) { setError('Escolha um ambiente e informe sua cidade.'); return; } if(step<2) move(step+1); else {setPreview(true);setStatus('');} }}>
-  {step===0 && <><fieldset><legend>Qual ambiente? <span>*</span></legend><div className="environment-options">{['Cozinha','Quarto','Sala','Mais de um ambiente','Outro'].map(a=><button type="button" key={a} aria-pressed={answers.environment===a} onClick={()=>update('environment',a)}>{a}{answers.environment===a&&<Check size={15}/>}</button>)}</div></fieldset><label htmlFor="city">Em qual cidade? <span>*</span></label><input id="city" autoComplete="address-level2" placeholder="Ex.: Campinas, SP" value={answers.city} onChange={e=>update('city',e.target.value)} maxLength={100} required/><p className="field-help">A disponibilidade de atendimento será confirmada na conversa.</p></>}
-  {step===1 && <>{([['measures','Você tem as medidas?',['Ainda não sei','Sim, tenho as medidas','Tenho algumas medidas','Ainda não medi']],['blueprint','Já tem projeto ou planta?',['Ainda não sei','Tenho projeto/planta','Tenho referências ou imagem de IA','Não tenho']],['timing','Quando pensa em executar?',['Ainda não sei','Assim que possível','Nos próximos 3 meses','Daqui a 3 a 6 meses','Estou apenas planejando']]] as const).map(([key,label,options])=><div className="select-field" key={key}><label htmlFor={key}>{label}</label><select id={key} value={answers[key]} onChange={e=>update(key,e.target.value)}>{options.map(o=><option key={o}>{o}</option>)}</select></div>)}<p className="field-help">Fotos, medidas e plantas podem ser compartilhadas depois, na conversa.</p></>}
-  {step===2 && <><label htmlFor="budget">Investimento aproximado <small>(opcional)</small></label><input id="budget" placeholder="Pode deixar para conversar depois" value={answers.budget} onChange={e=>update('budget',e.target.value)} maxLength={100}/><div className="review"><h4>SUA IDEIA, ATÉ AQUI</h4><dl>{[['Ambiente',answers.environment],['Cidade',answers.city],['Medidas',answers.measures],['Projeto/planta',answers.blueprint],['Previsão',answers.timing]].map(([a,b])=><div key={a}><dt>{a}</dt><dd>{b}</dd></div>)}</dl></div></>}
-  {error&&<p className="error" role="alert">{error}</p>}<div className="form-actions">{step>0&&<button type="button" className="back" onClick={()=>{setPreview(false);move(step-1);}}><ChevronLeft size={17}/>Voltar</button>}<button type="submit" className="button">{step===2?'Ver minha mensagem':'Continuar'}<ArrowRight size={18}/></button></div><p className="privacy"><ShieldCheck size={14}/> Seus dados ficam apenas nesta página.</p></form>
-  {preview&&<div className="message-preview" role="region" aria-label="Prévia da mensagem"><h4>Sua conversa começa assim</h4><textarea ref={output} aria-label="Mensagem para copiar" readOnly value={message} rows={11}/>{!site.demonstration && link ? <a className="button" href={link} target="_blank" rel="noreferrer">Abrir no WhatsApp<ArrowUpRight size={17}/></a> : <p className="field-help">Esta é uma prévia. Nenhuma mensagem foi enviada.</p>}<button className="button secondary" onClick={copy}>Copiar mensagem</button><p className="copy-status" role="status">{status}</p></div>}
-  </div></section>;
-}
 function App() {
- const [menu,setMenu] = useState(false); const [hideBar,setHideBar] = useState(false);
- useEffect(()=>{Object.entries(site.colors).forEach(([k,v])=>document.documentElement.style.setProperty(`--${k}`,v));const form=document.querySelector('#seu-projeto');const observer=new IntersectionObserver(([entry])=>setHideBar(entry.isIntersecting),{threshold:0});if(form)observer.observe(form);return()=>observer.disconnect();},[]);
- return <><a href="#conteudo" className="skip">Pular para o conteúdo</a><header className="header"><a href="#" className="brand" aria-label="Forma, início">{site.name}<span>{site.subtitle}</span></a><nav aria-label="Navegação principal" className={menu?'open':''}><a href="#diferenciais" onClick={()=>setMenu(false)}>O que faz diferença</a><a href="#ambientes" onClick={()=>setMenu(false)}>Ambientes</a><a href="#processo" onClick={()=>setMenu(false)}>Como funciona</a></nav><a href="#seu-projeto" className="header-cta">Vamos conversar<ArrowUpRight size={16}/></a><button className="menu-toggle" aria-label={menu?'Fechar menu':'Abrir menu'} aria-expanded={menu} onClick={()=>setMenu(!menu)}>{menu?<X/>:<Menu/>}</button></header><main id="conteudo"><section className="hero"><div className="hero-copy"><Eyebrow>FEITO PARA A VIDA REAL</Eyebrow><h1>{site.hero.title}<br/><em>{site.hero.emphasis}</em></h1><p>{site.hero.description}</p><CTA/><div className="hero-foot"><span className="mini-lines"><Layers size={22}/></span><span>Mais do que preencher espaços.<br/><strong>Fazer sentido na sua rotina.</strong></span></div></div><div className="hero-image"><Photo src={site.images.kitchen} alt="Cozinha clara com armários de madeira, bancada e luz natural; referência ilustrativa" eager/><span className="image-label">AMBIENTE ILUSTRATIVO</span><div className="hero-caption"><span>01 / INSPIRAÇÃO</span><p>Beleza que se vê.<br/><em>Cuidado que se vive.</em></p><ArrowUpRight size={29}/></div></div><span className="hero-side">DESIGN QUE ACOLHE. DETALHES QUE IMPORTAM.</span></section><div className="values-strip"><span><Leaf size={17}/> Pensado para sua rotina</span><i/><span><Layers size={17}/> Atenção aos detalhes</span><i/><span><MessageCircle size={17}/> Uma conversa antes da proposta</span></div><Comparison/><section className="budget-section"><div className="section"><Eyebrow>ALÉM DO NÚMERO NO PAPEL</Eyebrow><h2>O que existe por trás<br/><em>de um orçamento?</em></h2><div className="benefit-grid">{[['Abertura suave','Ferragens escolhidas para o peso e a frequência de uso.'],['Espaço bem usado','Um projeto que considera seus objetos e a sua rotina.'],['Fácil de cuidar','Acabamentos e orientações para conservar seu móvel.'],['Tudo alinhado','Instalação, regulagem e atenção ao encontro das peças.'],['Apoio depois','Clareza sobre ajustes, atendimento e condições de suporte.']].map(([title,description],i)=>{const Icon=icons[i];return <article key={title}><Icon size={25} strokeWidth={1.3}/><h3>{title}</h3><p>{description}</p></article>;})}</div><p className="budget-note">O resultado vem do conjunto: especificações, projeto e execução.</p></div></section><Projects/><section className="section trust"><div><Eyebrow>ESCOLHER COM MAIS SEGURANÇA</Eyebrow><h2>Confiança também<br/><em>se constrói nos detalhes.</em></h2><p>Uma boa decisão começa com informações claras. Leve estas perguntas para a conversa.</p></div><div className="checklist">{[['Olhe de perto','Peça fotos dos encontros, bordas e interiores dos móveis.'],['Saiba o que está incluído','Compare materiais, ferragens, medidas e serviços especificados.'],['Entenda o depois','Confirme instalação, ajustes e condições do pós-venda.']].map(([a,b])=><div key={a}><Check size={18}/><div><h3>{a}</h3><p>{b}</p></div></div>)}{site.verifiedProofs.map(p=><div key={p.title}><ShieldCheck/><div><h3>{p.title}</h3><p>{p.description}</p></div></div>)}</div></section><section className="statement"><span className="eyebrow">UM OUTRO JEITO DE COMPARAR</span><h2>Não compare apenas o valor final.<br/><em>Compare o que você está<br/>levando para casa.</em></h2><div className="statement-tags">{comparisons.map(c=><span key={c.name}>{c.name}</span>)}</div><CTA className="light">Vamos pensar no seu ambiente</CTA><span className="statement-decoration" aria-hidden="true"/></section><section id="processo" className="section process"><Eyebrow>DO PRIMEIRO OLÁ AO SEU ESPAÇO</Eyebrow><h2>Um passo de cada vez.<br/><em>Com tudo mais claro.</em></h2><div className="steps">{[['Conte sua ideia','Como você imagina o seu espaço?'],['Compartilhe referências','Fotos, medidas e o que te inspira.'],['Entenda o projeto','Necessidades e possibilidades na mesa.'],['Conheça a proposta','Especificações e condições para avaliar.'],['Produção e instalação','A ideia ganhando forma no ambiente.']].map(([a,b],i)=><article key={a}><span>0{i+1}</span><h3>{a}</h3><p>{b}</p></article>)}</div>{site.demonstration&&<p className="field-help">Fluxo sugerido para demonstração. Etapas e condições serão confirmadas com a fábrica.</p>}</section><section className="section faq"><div><Eyebrow>ANTES DA NOSSA CONVERSA</Eyebrow><h2>Talvez você esteja<br/><em>se perguntando…</em></h2></div><div>{faqs.map(([q,a])=><details key={q}><summary>{q}<Plus className="plus" size={18}/><Minus className="minus" size={18}/></summary><p>{a}</p></details>)}</div></section><Qualification/></main><footer><a href="#" className="brand">{site.name}<span>{site.subtitle}</span></a><p>Espaços pensados. Vida acontecendo.</p><small>{site.demonstration?'Demonstração conceitual · Marca e imagens ilustrativas.':'Móveis planejados para o seu espaço.'}</small></footer><div className={`mobile-bar ${hideBar?'hidden':''}`}><CTA>Conversar sobre meu projeto</CTA></div></>;
+  const [menu, setMenu] = useState(false);
+  const [hideBar, setHideBar] = useState(false);
+  const [priorities, setPriorities] = useState<string[]>([]);
+  const [checks, setChecks] = useState<QuoteChecks>({});
+  const togglePriority = (value: string) =>
+    setPriorities((current) =>
+      current.includes(value)
+        ? current.filter((p) => p !== value)
+        : [...current, value],
+    );
+  useEffect(() => {
+    const form = document.querySelector("#seu-projeto");
+    const observer = new IntersectionObserver(([entry]) =>
+      setHideBar(entry.isIntersecting),
+    );
+    if (form) observer.observe(form);
+    return () => observer.disconnect();
+  }, []);
+  useEffect(() => {
+    const closeMenu = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenu(false);
+    };
+    document.addEventListener("keydown", closeMenu);
+    return () => document.removeEventListener("keydown", closeMenu);
+  }, []);
+  return (
+    <>
+      <a href="#conteudo" className="skip">
+        Pular para o conteúdo
+      </a>
+      <div className="topline">
+        <span>MÓVEIS SOB MEDIDA. ESCOLHAS BEM PENSADAS.</span>
+        <span>
+          <MapPin size={11} />
+          {site.city}
+        </span>
+      </div>
+      <header className="header">
+        <Brand />
+        <nav
+          id="main-nav"
+          aria-label="Navegação principal"
+          className={menu ? "open" : ""}
+        >
+          {[
+            ["#diferenciais", "Olhe os detalhes"],
+            ["#comparar", "Compare melhor"],
+            ["#ambientes", "Ambientes"],
+          ].map(([href, label]) => (
+            <a key={href} href={href} onClick={() => setMenu(false)}>
+              {label}
+            </a>
+          ))}
+        </nav>
+        <a href="#seu-projeto" className="header-cta">
+          Seu projeto
+          <ArrowUpRight size={16} />
+        </a>
+        <button
+          className="menu-toggle"
+          aria-label={menu ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={menu}
+          aria-controls="main-nav"
+          onClick={() => setMenu(!menu)}
+        >
+          {menu ? <X /> : <Menu />}
+        </button>
+      </header>
+      <main id="conteudo">
+        <section className="hero">
+          <div className="hero-copy">
+            <Eyebrow>SOB MEDIDA VAI ALÉM DAS MEDIDAS</Eyebrow>
+            <h1>
+              O preço está <br />
+              no papel.
+              <br />
+              <em>
+                A diferença está
+                <br />
+                no seu dia a dia.
+              </em>
+            </h1>
+            <p>
+              Antes de comparar orçamentos, descubra as escolhas que mudam como
+              você vive o seu espaço.
+            </p>
+            <CTA href="#diferenciais">Descobrir o que faz diferença</CTA>
+            <a className="text-link" href="#comparar">
+              Já tenho um orçamento
+              <ArrowRight size={15} />
+            </a>
+            <div className="hero-signature">
+              <span className="signature-line" />
+              <span>
+                Design que você vê.
+                <br />
+                <strong>Escolhas que você entende.</strong>
+              </span>
+            </div>
+          </div>
+          <div className="hero-composition">
+            <div className="hero-main-photo">
+              <Photo photo={photos.hero} eager />
+              <span className="photo-credit">
+                AMBIENTE DO PERFIL PROJ’MÓVEIS
+              </span>
+              <span className="photo-axis">
+                01 — COZINHA / MADEIRA + GRAFITE
+              </span>
+            </div>
+            <div className="hero-secondary">
+              <Photo photo={photos.bedroom} eager />
+              <span>02 / ACOLHER</span>
+            </div>
+            <a href="#diferenciais" className="hero-discovery">
+              <span className="discovery-icon">
+                <Plus size={24} />
+              </span>
+              <div>
+                <span>OLHE MAIS DE PERTO</span>
+                <p>
+                  A foto é só
+                  <br />o começo.
+                </p>
+              </div>
+              <ArrowUpRight size={22} />
+            </a>
+            <div className="hero-caption">
+              <span>PROJ’</span>
+              <p>
+                Seu espaço merece
+                <br />
+                uma escolha consciente.
+              </p>
+            </div>
+            <span className="vertical-caption">
+              FLORES DA CUNHA, RS · MÓVEIS DESIGN
+            </span>
+          </div>
+        </section>
+        <div className="journey">
+          <a href="#diferenciais">
+            <span>01</span>Explore os detalhes
+            <ArrowRight size={15} />
+          </a>
+          <a href="#comparar">
+            <span>02</span>Compare com critério
+            <ArrowRight size={15} />
+          </a>
+          <a href="#seu-projeto">
+            <span>03</span>Converse com contexto
+            <ArrowUpRight size={15} />
+          </a>
+        </div>
+        <DetailExplorer priorities={priorities} onToggle={togglePriority} />
+        <div className="insight">
+          <span className="insight-symbol">≠</span>
+          <p>
+            O mesmo nome no orçamento
+            <br />
+            <strong>não significa a mesma entrega.</strong>
+          </p>
+          <span className="insight-aside">
+            “Cozinha sob medida” é o começo da descrição.
+            <br />
+            Materiais, soluções e serviços completam a história.
+          </span>
+        </div>
+        <QuoteGuide
+          checks={checks}
+          onChange={(id, value) =>
+            setChecks((current) => ({ ...current, [id]: value }))
+          }
+        />
+        <section id="ambientes" className="section projects">
+          <div className="section-heading">
+            <div>
+              <Eyebrow number="03">DO PERFIL DA PROJ’MÓVEIS</Eyebrow>
+              <h2>
+                Além de gostar da foto,
+                <br />
+                <em>entenda a ideia.</em>
+              </h2>
+            </div>
+            <a
+              className="text-link"
+              href={site.instagram}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Conhecer o perfil
+              <Instagram size={17} />
+            </a>
+          </div>
+          <div className="project-grid">
+            {projects.map((p, i) => (
+              <article className="project" key={p.id}>
+                <div className="project-photo">
+                  <Photo photo={p.photo} />
+                  <span className="project-number">0{i + 1}</span>
+                  <span className="project-photo-label">{p.category}</span>
+                </div>
+                <h3>{p.title}</h3>
+                <details>
+                  <summary>
+                    O que observar neste ambiente
+                    <Plus size={17} />
+                  </summary>
+                  <div className="story">
+                    <span className="mini-label">A SOLUÇÃO VISÍVEL</span>
+                    <p>{p.observation}</p>
+                    <span className="mini-label">
+                      TRAZENDO PARA A SUA ROTINA
+                    </span>
+                    <p>{p.question}</p>
+                    <button
+                      className="save-project"
+                      aria-pressed={priorities.includes(p.priority)}
+                      onClick={() => togglePriority(p.priority)}
+                    >
+                      {priorities.includes(p.priority) ? (
+                        <Check size={15} />
+                      ) : (
+                        <Plus size={15} />
+                      )}{" "}
+                      {priorities.includes(p.priority)
+                        ? "Ideia adicionada"
+                        : "Quero levar essa ideia"}
+                    </button>
+                  </div>
+                </details>
+              </article>
+            ))}
+          </div>
+          <p className="source-note">
+            Imagens das publicações fornecidas. As observações descrevem o que
+            está visível; não são relatos de clientes nem especificações
+            técnicas.
+          </p>
+        </section>
+        <section id="empresa" className="company-section">
+          <div className="company-image">
+            <Photo photo={photos.factory} />
+            <span className="factory-label">
+              <MapPin size={16} />
+              FLORES DA CUNHA / RS
+            </span>
+          </div>
+          <div className="company-copy">
+            <Eyebrow number="04">QUEM ESTÁ POR TRÁS DO PROJETO</Eyebrow>
+            <h2>
+              Um endereço real.
+              <br />
+              Uma história na madeira.
+              <br />
+              <em>Uma conversa próxima.</em>
+            </h2>
+            <p>
+              A Proj’Móveis Design cria móveis sob medida para espaços
+              residenciais, comerciais e corporativos, em Flores da Cunha.
+            </p>
+            <div className="company-stats">
+              <div>
+                <strong>{site.experience}</strong>
+                <span>anos de experiência</span>
+              </div>
+              <div>
+                <strong>{site.projectsCount}</strong>
+                <span>projetos executados</span>
+              </div>
+            </div>
+            <p className="source-note">
+              Experiência e projetos informados no material institucional da
+              empresa.
+            </p>
+            <div className="company-address">
+              <MapPin size={18} />
+              <p>
+                {site.address}
+                <br />
+                {site.city}
+              </p>
+            </div>
+            <a className="text-link" href="#seu-projeto">
+              Vamos conhecer o seu espaço
+              <ArrowUpRight size={17} />
+            </a>
+          </div>
+        </section>
+        <section className="section process" id="processo">
+          <div className="process-intro">
+            <Eyebrow>DA SUA IDEIA À PROPOSTA</Eyebrow>
+            <h2>
+              Primeiro, entender.
+              <br />
+              <em>Depois, propor.</em>
+            </h2>
+            <p>
+              Um caminho sugerido para dar clareza à conversa. Etapas e
+              condições são combinadas no atendimento.
+            </p>
+          </div>
+          <div className="process-steps">
+            {[
+              [
+                "01",
+                "Sua rotina",
+                "Ambiente, necessidades e o que você quer resolver.",
+              ],
+              [
+                "02",
+                "As possibilidades",
+                "Medidas, referências e escolhas para avaliar juntos.",
+              ],
+              [
+                "03",
+                "A proposta",
+                "Especificações, serviços e condições para comparar.",
+              ],
+              [
+                "04",
+                "A execução",
+                "Produção, instalação e ajustes conforme o combinado.",
+              ],
+            ].map(([n, a, b]) => (
+              <article key={n}>
+                <span>{n}</span>
+                <div>
+                  <h3>{a}</h3>
+                  <p>{b}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+        <section className="section faq">
+          <div>
+            <Eyebrow>ESCOLHER SEM FICAR NO ESCURO</Eyebrow>
+            <h2>
+              Uma dúvida a menos.
+              <br />
+              <em>Uma decisão melhor.</em>
+            </h2>
+          </div>
+          <div>
+            {faqs.map(([q, a]) => (
+              <details key={q}>
+                <summary>
+                  {q}
+                  <ChevronDown size={18} />
+                </summary>
+                <p>{a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+        <Qualification
+          brief={{ priorities, checks }}
+          onToggle={togglePriority}
+        />
+      </main>
+      <footer>
+        <div className="footer-top">
+          <Brand />
+          <p>
+            O seu espaço.
+            <br />
+            <em>Entendido nos detalhes.</em>
+          </p>
+          <a href={site.instagram} target="_blank" rel="noreferrer">
+            <Instagram size={19} />
+            @proj.moveis.design
+            <ArrowUpRight size={15} />
+          </a>
+        </div>
+        <div className="footer-bottom">
+          <span>
+            {site.city} · {site.phoneLabel}
+          </span>
+          <small>
+            {site.demonstration
+              ? "Prévia de apresentação · Conteúdo institucional fornecido pela empresa."
+              : "Proj’Móveis Design · Móveis sob medida."}
+          </small>
+          <a href="#conteudo">
+            Voltar ao início
+            <ArrowDown size={12} />
+          </a>
+        </div>
+      </footer>
+      <div className={`mobile-bar ${hideBar ? "hidden" : ""}`}>
+        <span>
+          {priorities.length
+            ? `${priorities.length} ${priorities.length === 1 ? "prioridade escolhida" : "prioridades escolhidas"}`
+            : "SEU ESPAÇO, SUAS PRIORIDADES"}
+        </span>
+        <CTA>
+          {priorities.length
+            ? "Levar minhas ideias para a conversa"
+            : "Conversar sobre meu projeto"}
+        </CTA>
+      </div>
+    </>
+  );
 }
-createRoot(document.getElementById('root')!).render(<React.StrictMode><App/></React.StrictMode>);
+createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+);

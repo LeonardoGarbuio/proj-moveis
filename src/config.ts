@@ -1,27 +1,271 @@
 export const site = {
-  name: 'forma', subtitle: 'MÓVEIS PLANEJADOS', demonstration: true,
-  whatsapp: '', region: '',
-  colors: { cream: '#f7f5ee', ink: '#30392e', green: '#46553e', wood: '#af7853' },
-  hero: { title: 'Parecem iguais na foto.', emphasis: 'A diferença aparece no dia a dia.', description: 'Entenda o que avaliar no seu móvel planejado antes de comparar orçamentos.' },
-  images: { kitchen: '/images/kitchen.jpg', bedroom: '/images/room.jpg', living: '/images/living.jpg', detail: '/images/drawer.jpg' },
-  verifiedProofs: [] as { title: string; description: string }[],
+  name: "Proj’Móveis Design",
+  demonstration: true,
+  whatsapp: "5554991412455",
+  phoneLabel: "(54) 99141-2455",
+  instagram: "https://www.instagram.com/proj.moveis.design/",
+  address: "Rua Via Veneto, s/n · Bairro dos Pinheiros",
+  city: "Flores da Cunha · RS",
+  // Informações transcritas do material institucional enviado pelo usuário.
+  experience: "25+",
+  projectsCount: "6 mil+",
 };
-export const comparisons = [
-  { name: 'Ferragens', title: 'A diferença que você sente em cada abertura.', look: 'Observe o movimento das portas e gavetas. Pergunte sobre amortecimento, capacidade de carga e regulagem.', benefit: 'Uma escolha adequada ajuda a tornar o uso mais suave e confortável.', question: 'Quais ferragens estão incluídas na proposta?', image: site.images.detail, icon: 'sliders' },
-  { name: 'Material', title: 'A base de um móvel bem pensado.', look: 'Compare o tipo de painel, a espessura e a indicação de uso para cada ambiente. Um nome de material, sozinho, não conta tudo.', benefit: 'Materiais especificados para o uso ajudam na conservação do móvel.', question: 'Qual material foi previsto para cada parte?', image: site.images.kitchen, icon: 'layers' },
-  { name: 'Acabamento', title: 'Os pequenos detalhes ficam à vista.', look: 'Observe bordas, emendas e superfícies de perto. Confira também as orientações de limpeza e conservação.', benefit: 'Um acabamento bem executado cuida do visual e facilita o dia a dia.', question: 'Como serão finalizadas as bordas e emendas?', image: site.images.detail, icon: 'sparkles' },
-  { name: 'Projeto', title: 'Um espaço que acompanha a sua rotina.', look: 'Pense na circulação, na altura dos armários e no que precisa guardar. O projeto deve partir de como você usa o espaço.', benefit: 'Uma distribuição adequada aproveita o ambiente e deixa tudo mais acessível.', question: 'Como o projeto considera minha rotina?', image: site.images.living, icon: 'ruler' },
-  { name: 'Montagem', title: 'O cuidado continua na instalação.', look: 'Confirme quem instala, quais ajustes estão previstos e como funciona o atendimento depois da entrega.', benefit: 'Alinhamento e ajustes adequados fazem parte do resultado final.', question: 'O que está incluído na instalação e no pós-venda?', image: site.images.bedroom, icon: 'tool' },
+export type CompanyPhoto = {
+  src: string;
+  sourceWidth: number;
+  sourceHeight: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  alt: string;
+};
+// A interface recorta as capturas sem alterar os arquivos originais.
+const grid = (
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  alt: string,
+): CompanyPhoto => ({
+  src: "/company/projects.png",
+  sourceWidth: 1677,
+  sourceHeight: 961,
+  x,
+  y,
+  width,
+  height,
+  alt,
+});
+export const photos = {
+  hero: grid(
+    1038,
+    13,
+    238,
+    297,
+    "Cozinha com armários escuros, madeira e bancada em península, publicada no perfil da Proj’Móveis",
+  ),
+  kitchen: grid(
+    68,
+    13,
+    237,
+    296,
+    "Cozinha do perfil da Proj’Móveis com armários amadeirados, torre de eletrodomésticos e bancada",
+  ),
+  bedroom: grid(
+    1280,
+    640,
+    239,
+    313,
+    "Quarto do perfil da Proj’Móveis com armários ao redor da cama e iluminação na cabeceira",
+  ),
+  living: grid(
+    554,
+    639,
+    238,
+    313,
+    "Painel de televisão com nichos, gavetas e iluminação, publicado no perfil da Proj’Móveis",
+  ),
+  office: grid(
+    68,
+    316,
+    237,
+    316,
+    "Escritório do perfil da Proj’Móveis com bancada, gaveteiro e prateleiras",
+  ),
+  warmKitchen: grid(
+    310,
+    317,
+    238,
+    315,
+    "Cozinha do perfil da Proj’Móveis com armários escuros, madeira e iluminação de bancada",
+  ),
+  factory: {
+    src: "/company/location.png",
+    sourceWidth: 903,
+    sourceHeight: 877,
+    x: 0,
+    y: 25,
+    width: 475,
+    height: 680,
+    alt: "Fachada da Proj’Móveis Design na imagem institucional fornecida",
+  } as CompanyPhoto,
+  logo: {
+    src: "/company/profile.png",
+    sourceWidth: 1823,
+    sourceHeight: 952,
+    x: 534,
+    y: 68,
+    width: 151,
+    height: 151,
+    alt: "Símbolo da Proj’Móveis Design",
+  } as CompanyPhoto,
+};
+export const details = [
+  {
+    id: "projeto",
+    name: "Projeto",
+    label: "Espaço que funciona",
+    x: 52,
+    y: 59,
+    title: "Bonito é caber na sua rotina.",
+    visible: "Uma bancada em península aproxima preparo e convivência.",
+    invisible:
+      "A foto não diz se a circulação, as alturas e o espaço para guardar funcionam para você.",
+    question:
+      "Como a distribuição será adaptada às minhas medidas e à minha rotina?",
+    benefit: "Aproveitar o ambiente sem improvisar depois.",
+    priority: "Aproveitar melhor o espaço",
+  },
+  {
+    id: "material",
+    name: "Material",
+    label: "Escolhas por dentro",
+    x: 24,
+    y: 29,
+    title: "A cor aparece. A especificação, nem sempre.",
+    visible:
+      "O contraste entre frentes escuras e superfícies amadeiradas define o visual.",
+    invisible:
+      "Tipo de painel, espessuras, estrutura e indicação de uso não podem ser confirmados só pela imagem.",
+    question:
+      "Quais materiais e espessuras estão previstos em cada parte do móvel?",
+    benefit: "Entender o que está sendo comprado, peça por peça.",
+    priority: "Conhecer os materiais e a estrutura",
+  },
+  {
+    id: "acabamento",
+    name: "Acabamento",
+    label: "Encontros e bordas",
+    x: 75,
+    y: 62,
+    title: "O cuidado mora onde uma peça encontra a outra.",
+    visible: "Frentes, bancada e laterais formam as linhas do ambiente.",
+    invisible:
+      "Bordas, emendas e encontros precisam de fotos próximas ou de uma amostra para serem avaliados.",
+    question: "Posso ver de perto como ficam as bordas, emendas e encontros?",
+    benefit: "Escolher sabendo quais detalhes vão ficar à vista todos os dias.",
+    priority: "Cuidar do acabamento e dos detalhes",
+  },
+  {
+    id: "ferragens",
+    name: "Ferragens",
+    label: "Abrir. Fechar. Repetir.",
+    x: 27,
+    y: 68,
+    title: "Você vai usar muito mais do que fotografar.",
+    visible: "Portas e gavetas organizam a parte inferior do ambiente.",
+    invisible:
+      "A imagem não revela o mecanismo, o amortecimento, a capacidade de carga ou os ajustes.",
+    question: "Quais ferragens estão incluídas e como funcionam no uso diário?",
+    benefit: "Avaliar o movimento e a praticidade, além da aparência.",
+    priority: "Ter praticidade ao abrir portas e gavetas",
+  },
+  {
+    id: "montagem",
+    name: "Montagem",
+    label: "Até o último ajuste",
+    x: 61,
+    y: 83,
+    title: "A entrega não termina no desenho.",
+    visible: "O conjunto depende do encontro entre móveis, paredes e piso.",
+    invisible:
+      "Instalação, regulagens, prazos e suporte precisam estar descritos na proposta.",
+    question:
+      "A proposta inclui instalação, ajustes e quais condições de pós-venda?",
+    benefit: "Saber quem cuida de cada etapa e o que está incluído.",
+    priority: "Ter clareza sobre instalação e pós-venda",
+  },
+] as const;
+export type DetailId = (typeof details)[number]["id"];
+export type CheckState = "clear" | "confirm";
+export type QuoteChecks = Partial<Record<DetailId, CheckState>>;
+export const quoteItems: {
+  id: DetailId;
+  title: string;
+  description: string;
+}[] = [
+  {
+    id: "material",
+    title: "Materiais e espessuras",
+    description:
+      "O que será usado nas frentes, na estrutura e nas partes internas?",
+  },
+  {
+    id: "ferragens",
+    title: "Ferragens e mecanismos",
+    description: "Quais modelos, funções e capacidades estão incluídos?",
+  },
+  {
+    id: "projeto",
+    title: "Medidas e distribuição",
+    description:
+      "As propostas consideram o mesmo ambiente e a mesma configuração?",
+  },
+  {
+    id: "acabamento",
+    title: "Acabamentos e detalhes",
+    description: "Bordas, emendas e finalizações estão especificadas?",
+  },
+  {
+    id: "montagem",
+    title: "Instalação e pós-venda",
+    description: "Serviços incluídos, ajustes e condições estão claros?",
+  },
 ];
 export const projects = [
-  { name: 'Espaço para cozinhar. E conviver.', category: 'COZINHA', image: site.images.kitchen, need: 'Integrar a cozinha à convivência sem abrir mão de espaço para guardar.', solution: 'Combinar armários, bancada livre e uma paleta de tons naturais.', result: 'Um ambiente que convida a estar junto, com uma rotina mais organizada.' },
-  { name: 'Tudo no lugar. Inclusive a calma.', category: 'QUARTO', image: site.images.bedroom, need: 'Organizar os objetos do dia a dia e preservar uma atmosfera tranquila.', solution: 'Pensar armazenamento e circulação em conjunto, com volumes simples.', result: 'Mais praticidade e um espaço acolhedor para desacelerar.' },
-  { name: 'Feita para os seus momentos.', category: 'SALA', image: site.images.living, need: 'Acomodar diferentes momentos de descanso e convivência.', solution: 'Distribuir mobiliário e áreas de apoio respeitando a passagem e a luz.', result: 'Uma sala confortável, com espaço para a vida acontecer.' },
+  {
+    id: "cozinha",
+    category: "COZINHA",
+    title: "Cada coisa no seu lugar. Você no centro.",
+    photo: photos.kitchen,
+    observation:
+      "A torre reúne os eletrodomésticos, enquanto a bancada cria um ponto de apoio e convivência.",
+    question:
+      "Onde você prepara, guarda e recebe hoje? Essa resposta muda a distribuição.",
+    priority: "Organização e circulação na cozinha",
+  },
+  {
+    id: "quarto",
+    category: "QUARTO",
+    title: "Armazenamento que faz parte do ambiente.",
+    photo: photos.bedroom,
+    observation:
+      "Os armários ocupam a área ao redor da cama e a iluminação destaca a cabeceira.",
+    question: "O que precisa ficar à mão e o que pode ser guardado mais alto?",
+    priority: "Armazenamento bem distribuído no quarto",
+  },
+  {
+    id: "sala",
+    category: "SALA",
+    title: "O painel também pode resolver a rotina.",
+    photo: photos.living,
+    observation:
+      "Nichos, gavetas e painel dividem o mesmo conjunto, com áreas abertas e fechadas.",
+    question:
+      "Além da TV, o que você precisa acomodar, esconder ou deixar à vista?",
+    priority: "Integração e organização na sala",
+  },
 ];
 export const faqs = [
-  ['Por que os orçamentos têm preços tão diferentes?', 'Materiais, ferragens, dimensões, complexidade do projeto, acabamento e instalação podem variar. Peça as especificações e compare o que cada proposta inclui, além do valor final.'],
-  ['É só para cozinhas?', 'Cozinhas, quartos e salas são exemplos apresentados aqui. Na conversa, confirme quais ambientes e tipos de móveis a fábrica executa.'],
-  ['Preciso ter um projeto pronto?', 'Você pode começar com uma ideia, referências e informações sobre o espaço. A disponibilidade de desenvolvimento de projeto e eventuais custos devem ser confirmados com a fábrica.'],
-  ['Vocês atendem minha cidade?', site.region ? `A região informada é ${site.region}. Confirme a disponibilidade para seu endereço no atendimento.` : 'Informe sua cidade no formulário. Como esta é uma demonstração, a região de atendimento ainda será confirmada com a fábrica.'],
-  ['Posso enviar uma referência criada por IA?', 'Sim, ela pode ajudar a explicar sua ideia. Medidas, materiais, estrutura e viabilidade precisam de avaliação técnica: uma imagem não substitui um projeto executável.'],
+  [
+    "Já tenho outros orçamentos. Posso conversar mesmo assim?",
+    "Sim. Use o roteiro acima para conferir se as propostas descrevem a mesma entrega. Na conversa, explique o que está claro e o que você ainda precisa entender. O objetivo é comparar especificações e serviços junto com o preço.",
+  ],
+  [
+    "Quer dizer que o mais caro é sempre melhor?",
+    "Não. Preço alto, sozinho, não comprova qualidade. O que permite uma comparação justa é saber quais materiais, ferragens, soluções e serviços estão incluídos — e se fazem sentido para você.",
+  ],
+  [
+    "Posso enviar uma imagem de IA ou uma referência?",
+    "Sim. Ela ajuda a mostrar o que você imagina. Medidas, materiais, estrutura e viabilidade ainda precisam de avaliação técnica. Uma imagem bonita não substitui um projeto executável.",
+  ],
+  [
+    "Preciso ter todas as medidas e um projeto pronto?",
+    "Não precisa ter tudo decidido para iniciar a conversa. Diga o que já tem: medidas, planta, fotos ou apenas uma ideia. As próximas etapas e eventuais custos de projeto serão esclarecidos no atendimento.",
+  ],
+  [
+    "Quais ambientes e cidades vocês atendem?",
+    "A Proj’Móveis apresenta móveis sob medida para ambientes residenciais, comerciais e corporativos. A empresa fica em Flores da Cunha, RS. Informe sua cidade para confirmar a disponibilidade de atendimento no seu endereço.",
+  ],
 ];

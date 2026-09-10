@@ -1,40 +1,62 @@
-# Forma — demonstração de móveis planejados
+# Proj’Móveis Design — pré-venda com percepção de valor
 
-Landing page mobile-first em React, TypeScript e Vite. Comparação educativa, projetos ilustrativos, perguntas frequentes e qualificação em três etapas com prévia e cópia da mensagem.
+Experiência para celular em React, TypeScript e Vite. Em vez de apenas apresentar ambientes, ajuda o visitante a entender escolhas, revisar o que está descrito em uma proposta e iniciar uma conversa com prioridades e dúvidas concretas.
 
 ## Executar
 
 ```sh
 npm install
 npm run dev
+npm run build
+npm test
 ```
 
-O terminal informa o endereço local e da rede. Para visualizar em um celular na mesma rede, use o endereço de rede. Build de produção: `npm run build`. Testes de navegador: `npm test` (instale Chromium com `npx playwright install chromium` se necessário).
+O Vite informa os endereços local e de rede. Para abrir no celular, conecte-o à mesma rede e use o endereço de rede exibido. O site não foi publicado.
 
-## Personalizar
+Os testes usam Playwright/Chromium. Instale o navegador com `npx playwright install chromium` ou defina `TEST_BROWSER_PATH` apontando para um Chromium já instalado. No ambiente desta entrega, a validação usou o Chromium existente. A comparação inclui 360, 390, 430 e 1440 px.
 
-`src/config.ts` centraliza marca, paleta, modo de demonstração, WhatsApp, região, imagens, comparações, projetos, FAQ e provas verificadas. Conteúdo estrutural complementar está em `src/main.tsx`; estilos em `src/styles.css`.
+## Percurso comercial
 
-Para uso comercial, revise todos os textos e exemplos com a fábrica, substitua as imagens por projetos autorizados, configure o telefone internacional apenas com dígitos (55 + DDD + número), preencha a região e altere `demonstration` para `false`. Provas só aparecem se adicionadas em `verifiedProofs`. Nenhum depoimento, garantia ou prazo comercial foi inventado. Com número válido e modo comercial, a revisão oferece o link do WhatsApp; a pessoa confirma o envio no aplicativo. Sem número válido, continua disponível a cópia da mensagem.
+1. **Explorar um ambiente:** cinco pontos interativos distinguem o que a foto mostra do que precisa ser confirmado. Cada detalhe pode virar uma prioridade pessoal.
+2. **Comparar a mesma entrega:** roteiro de materiais, ferragens, distribuição, acabamento e instalação. O visitante marca “Está claro” ou “Quero confirmar”. Pode copiar o roteiro sem informar dados.
+3. **Trazer referências para a própria rotina:** ambientes do perfil com observações visuais e perguntas, sem histórias de clientes inventadas. Ideias podem ser adicionadas à conversa.
+4. **Conversar com contexto:** formulário em três etapas. A mensagem incorpora prioridades, dúvidas e marcações explícitas. Itens não revisados não são apresentados como respostas do visitante.
 
-Não há backend, armazenamento persistente, upload, analytics ou envio automático. Fotos e plantas são compartilhadas na conversa. Recarregar a página limpa as respostas. Fontes DM Sans e Manrope são carregadas pelo Google Fonts, com fontes de sistema como alternativa.
+O roteiro não atribui notas a fornecedores, não certifica qualidade e não afirma que o mais caro é melhor. O site não promete aumento de conversão.
 
-## Imagens ilustrativas
+## Conteúdo e configuração
 
-Arquivos locais em duas resoluções (640 e 1600 px), obtidos do Unsplash. Não representam trabalhos realizados pela marca provisória.
+- `src/config.ts`: empresa, contato, modo de demonstração, recortes das imagens, detalhes educativos, perguntas e ambientes.
+- `src/ValueExperience.tsx`: explorador e roteiro interativo.
+- `src/Qualification.tsx` e `src/contact.ts`: formulário, resumo comercial, cópia e link do WhatsApp.
+- `src/ui.tsx`: componentes compartilhados e enquadramento das imagens.
+- `src/styles.css`: identidade creme, grafite e vinho, responsividade e movimento reduzido.
 
-- Cozinha: identificador CDN `photo-1556912172-45b7abe8b7e1`
-- Quarto (`room.jpg`): identificador CDN `photo-1611892440504-42a792e24d32`
-- Sala: identificador CDN `photo-1600210492486-724fe5c67fb0`
-- Detalhe de gaveta: `public/images/drawer.jpg` e `drawer-small.jpg`, ilustração gerada com a ferramenta integrada de geração de imagens. Prompt completo em `docs/image-prompt.txt`. É uma referência conceitual, não um desenho técnico.
+`site.demonstration` permanece `true`: o fluxo termina em prévia/cópia, sem abrir um atendimento real. Para uso comercial, revise o conteúdo e altere para `false`. O número `5554991412455` foi transcrito do telefone legível na arte de localização. Com o modo comercial e um número válido, a prévia oferece o botão do WhatsApp; o usuário confirma o envio no aplicativo.
 
-Fonte dos arquivos: `https://images.unsplash.com/{identificador}?auto=format&fit=crop&w={640|1600}&q=80`. Licença: https://unsplash.com/license . Substituir imagens ilustrativas por fotos autorizadas da fábrica antes da publicação comercial.
+Nenhum backend, armazenamento persistente, upload, analytics ou envio automático foi adicionado. Recarregar a página limpa respostas e seleções. A cópia tem alternativa manual quando a área de transferência está indisponível, inclusive em acesso HTTP pela rede local.
 
-## Apresentação
+## Material da empresa
 
-1. Mostre como comparar especificações na seção de detalhes.
-2. Abra a história de um ambiente.
-3. Preencha a qualificação no celular.
-4. Mostre a mensagem organizada, pronta para iniciar a conversa.
+### Vistas internas com IA
 
-Esta entrega não publica o site e não promete resultados comerciais.
+Ao tocar nos pontos do explorador, uma transição revela uma das cinco vistas internas: organização, estrutura em camadas, acabamento, ferragens ou montagem. É possível alternar as vistas, repetir a abertura e voltar à foto original; Escape também fecha e devolve o foco ao ponto escolhido. O modo de movimento reduzido elimina a animação. Há estado de carregamento e tentativa novamente em caso de falha.
+
+As imagens foram geradas previamente com a ferramenta integrada `image_gen` e exportadas para `public/images/interiors/` (140–195 KB por vista). Não há chamada de IA no navegador nem credenciais expostas. O aviso “Simulação com IA” permanece visível: são conceitos educativos, não documentos técnicos do móvel fotografado. Prompts completos em `docs/interior-prompts.md`. Componentes em `src/InteriorReveal.tsx` e estilos em `src/interior.css`.
+
+As quatro capturas fornecidas foram copiadas, sem alterar os originais, para `public/company/`:
+
+- `profile.png`: perfil, símbolo e identificação da marca.
+- `projects.png`: publicações de ambientes.
+- `location.png`: fachada, endereço e telefone.
+- `about.png`: material institucional que informa mais de 25 anos de experiência e mais de 6 mil projetos. A origem desses números é indicada junto à exibição no site.
+
+Os recortes são feitos por CSS, preservando os pixels e o conteúdo original. As imagens são identificadas como publicações do perfil: não presumimos que cada imagem seja uma fotografia de obra entregue. Não são atribuídos materiais, marcas de ferragens, garantias, depoimentos ou resultados não informados.
+
+As capturas têm miniaturas pequenas. O enquadramento é adequado para a demonstração, mas as fotos originais em resolução maior melhorarão a nitidez antes de uma publicação comercial. O mapa decorativo da arte de localização não é utilizado como mapa real. Os assets de banco de imagens da primeira versão continuam no repositório, mas não são usados nesta interface.
+
+## Roteiro para apresentar à fábrica
+
+Abra no celular e toque em “Ferragens”. Marque que isso importa no projeto. No roteiro, selecione materiais como “Quero confirmar”. Escolha uma ideia de ambiente e avance no formulário. Mostre que a mensagem final pergunta por especificações e já informa o que o cliente valoriza.
+
+Essa demonstração torna concreta a proposta comercial: ajudar o visitante a reconhecer diferenças antes de tratar os orçamentos como equivalentes.
