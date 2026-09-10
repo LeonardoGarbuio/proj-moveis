@@ -129,10 +129,7 @@ function App() {
                 01 — COZINHA / MADEIRA + GRAFITE
               </span>
             </div>
-            <div className="hero-secondary">
-              <Photo photo={photos.bedroom} eager />
-              <span>02 / ACOLHER</span>
-            </div>
+
             <a href="#diferenciais" className="hero-discovery">
               <span className="discovery-icon">
                 <Plus size={24} />

@@ -13,19 +13,19 @@ export function buildMessage(
   brief: ValueBrief = { priorities: [], checks: {} },
 ) {
   const priorities = brief.priorities.length
-    ? `\n\nO que é importante para mim:\n${brief.priorities.map((p) => `• ${p}`).join("\n")}`
+    ? `\n\n*O que é importante para mim:*\n${brief.priorities.map((p) => `- ${p}`).join("\n")}`
     : "";
   const pending = quoteItems.filter(
     (item) => brief.checks[item.id] === "confirm",
   );
   const clear = quoteItems.filter((item) => brief.checks[item.id] === "clear");
   const questions = pending.length
-    ? `\n\nQuero esclarecer antes de comparar propostas:\n${pending.map((item) => `• ${details.find((d) => d.id === item.id)!.question}`).join("\n")}`
+    ? `\n\n*Quero esclarecer antes de comparar propostas:*\n${pending.map((item) => `- ${details.find((d) => d.id === item.id)!.question}`).join("\n")}`
     : "";
   const checked = clear.length
-    ? `\n\nItens que marquei como claros na minha comparação: ${clear.map((i) => i.title).join("; ")}.`
+    ? `\n\n*Itens que marquei como claros:* ${clear.map((i) => i.title).join("; ")}.`
     : "";
-  return `Olá, Proj’Móveis! Quero entender as escolhas para o meu projeto de móveis sob medida.\n\nAmbiente: ${a.environment}\nCidade: ${a.city.trim()}\nMedidas: ${a.measures}\nProjeto/planta: ${a.blueprint}\nPrevisão: ${a.timing}\nInvestimento aproximado: ${a.budget.trim() || "Prefiro conversar sobre isso"}${priorities}${questions}${checked}\n\nPosso compartilhar fotos e referências por aqui.`;
+  return `Olá! Vim pelo site da *Proj'Móveis* e quero entender as escolhas para o meu projeto de móveis sob medida.\n\n*Ambiente:* ${a.environment}\n*Cidade:* ${a.city.trim()}\n*Medidas:* ${a.measures}\n*Projeto/planta:* ${a.blueprint}\n*Previsão:* ${a.timing}\n*Investimento:* ${a.budget.trim() || "Prefiro conversar sobre isso"}${priorities}${questions}${checked}\n\nPosso compartilhar fotos e referências por aqui.`;
 }
 export function buildChecklist(checks: QuoteChecks) {
   return `MEU ROTEIRO PARA COMPARAR MÓVEIS SOB MEDIDA\n\n${quoteItems

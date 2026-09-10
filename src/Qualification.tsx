@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
-  ArrowUpRight,
   Check,
   ChevronLeft,
   MessageCircle,
+  Send,
   ShieldCheck,
   X,
 } from "lucide-react";
@@ -34,7 +34,6 @@ export function Qualification({
     budget: "",
   });
   const [preview, setPreview] = useState(false);
-  const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const heading = useRef<HTMLHeadingElement>(null);
   const output = useRef<HTMLTextAreaElement>(null);
@@ -55,14 +54,9 @@ export function Qualification({
       output.current?.scrollIntoView({ block: "center" });
     }
   }, [preview]);
-  async function copy() {
-    try {
-      await navigator.clipboard.writeText(message);
-      setStatus("Mensagem copiada!");
-    } catch {
-      output.current?.focus();
-      output.current?.select();
-      setStatus("Selecione e copie o texto acima para continuar.");
+  function sendWhatsApp() {
+    if (link) {
+      window.open(link, "_blank", "noreferrer");
     }
   }
   return (
@@ -165,7 +159,6 @@ export function Qualification({
             if (step < 2) move(step + 1);
             else {
               setPreview(true);
-              setStatus("");
             }
           }}
         >
@@ -351,27 +344,10 @@ export function Qualification({
               value={message}
               rows={12}
             />
-            {!site.demonstration && link ? (
-              <a
-                className="button"
-                href={link}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Abrir no WhatsApp
-                <ArrowUpRight size={17} />
-              </a>
-            ) : (
-              <p className="field-help">
-                Prévia de apresentação. Nenhuma mensagem foi enviada.
-              </p>
-            )}
-            <button className="button secondary" onClick={copy}>
-              Copiar mensagem
+            <button className="button" onClick={sendWhatsApp} disabled={!link}>
+              <Send size={17} />
+              Mandar mensagem
             </button>
-            <p className="copy-status" role="status">
-              {status}
-            </p>
           </div>
         )}
       </div>
