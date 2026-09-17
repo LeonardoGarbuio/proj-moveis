@@ -20,7 +20,7 @@ Os testes usam Playwright/Chromium. Instale o navegador com `npx playwright inst
 1. **Explorar um ambiente:** cinco pontos interativos distinguem o que a foto mostra do que precisa ser confirmado. Cada detalhe pode virar uma prioridade pessoal.
 2. **Comparar a mesma entrega:** roteiro de materiais, ferragens, distribuição, acabamento e instalação. O visitante marca “Está claro” ou “Quero confirmar”. Pode copiar o roteiro sem informar dados.
 3. **Trazer referências para a própria rotina:** ambientes do perfil com observações visuais e perguntas, sem histórias de clientes inventadas. Ideias podem ser adicionadas à conversa.
-4. **Conversar com contexto:** formulário em três etapas. A mensagem incorpora prioridades, dúvidas e marcações explícitas. Itens não revisados não são apresentados como respostas do visitante.
+4. **Conversar com contexto:** formulário em três etapas. A mensagem incorpora prioridades, dúvidas e marcações explícitas. Itens não revisados não são apresentados como respostas do visitante..
 
 O roteiro não atribui notas a fornecedores, não certifica qualidade e não afirma que o mais caro é melhor. O site não promete aumento de conversão.
 
